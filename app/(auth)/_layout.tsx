@@ -1,6 +1,6 @@
-import { View, Text } from "react-native";
+import { Redirect, Stack } from "expo-router";
 import React from "react";
-import { Stack } from "expo-router";
+import { useAuthContext } from "../../contexts/authContextProvider";
 
 const AuthLayout = () => {
   return (
@@ -12,6 +12,8 @@ const AuthLayout = () => {
     >
       <Stack.Screen name="sign-in" />
       <Stack.Screen name="sign-up" />
+      <Stack.Screen name="reset-password" />
+      <Stack.Screen name="add-phone" />
     </Stack>
   );
 };

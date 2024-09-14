@@ -1,16 +1,46 @@
-import { Link, router } from "expo-router";
+import { Link, Redirect, router } from "expo-router";
 import React, { useState } from "react";
 import { KeyboardAvoidingView, Platform, Text, View } from "react-native";
 import Container from "../../components/container";
 import CustomButton from "../../components/customButton";
 import FormField from "../../components/formField";
 import LayoutGradient from "../../components/layoutGradient";
+import { useAuthContext } from "../../contexts/authContextProvider";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../firebase/firebaseConfig";
+import Alert from "../../components/alert";
+import { FIREBASE_ERRORS } from "../../firebase/errors";
 
 const SignIn = () => {
+  const { isLoading: loadingUser, isAuthenticated } = useAuthContext();
+
+  if (!loadingUser && isAuthenticated) return <Redirect href="/home" />;
+
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSignIn = async () => {
+    try {
+      if (!form.email || !form.password) return;
+
+      if (error) setError("");
+
+      setIsLoading(true);
+
+      await signInWithEmailAndPassword(auth, form.email, form.password);
+
+      router.push("/home");
+    } catch (error: any) {
+      console.log(error.message);
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <Container>
@@ -40,10 +70,18 @@ const SignIn = () => {
           placeholder="Your Password"
         />
 
+        {error && (
+          <Alert severity="error">
+            {FIREBASE_ERRORS[error as keyof typeof FIREBASE_ERRORS] ??
+              "Error, Try again later!"}
+          </Alert>
+        )}
+
         <CustomButton
           title="Login"
           containerStyle="mt-7"
-          handlePress={() => router.push("/home")}
+          isLoading={isLoading}
+          handlePress={() => handleSignIn()}
         />
 
         <Link

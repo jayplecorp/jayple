@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "873957741068",
+    "project_id": "jayple-34ead",
+    "storage_bucket": "jayple-34ead.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:873957741068:android:a7cc0455c01107a9df5429",
+        "android_client_info": {
+          "package_name": "com.jayplecorp.jayple"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARVDZWfYCwp0QR7SR0H_EzIezT8Uw_ww4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

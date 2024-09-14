@@ -1,11 +1,16 @@
-import { router } from "expo-router";
+import { Redirect, router } from "expo-router";
 import React from "react";
 import { Image, ImageBackground, Text, View } from "react-native";
 import Container from "../components/container";
 import CustomButton from "../components/customButton";
 import images from "../constants/images";
+import { useAuthContext } from "../contexts/authContextProvider";
 
 const Onboaring = () => {
+  const { isLoading, isAuthenticated } = useAuthContext();
+
+  if (!isLoading && isAuthenticated) return <Redirect href="/home" />;
+
   return (
     <Container>
       <ImageBackground

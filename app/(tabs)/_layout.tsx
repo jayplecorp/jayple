@@ -1,9 +1,14 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Redirect, Tabs } from "expo-router";
 import React from "react";
-import { Tabs } from "expo-router";
+import { Text } from "react-native";
 import { TabBarIcon } from "../../components/tabBarIcon";
+import { useAuthContext } from "../../contexts/authContextProvider";
 
-const RootLayout = () => {
+const TabLayout = () => {
+  const { isLoading, isAuthenticated } = useAuthContext();
+
+  if (!isLoading && !isAuthenticated) return <Redirect href="/sign-in" />;
+
   return (
     <Tabs
       screenOptions={{
@@ -85,6 +90,4 @@ const RootLayout = () => {
   );
 };
 
-export default RootLayout;
-
-const styles = StyleSheet.create({});
+export default TabLayout;
