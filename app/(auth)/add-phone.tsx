@@ -1,23 +1,27 @@
 import { Redirect, router } from "expo-router";
-import React, { useState } from "react";
-import { KeyboardAvoidingView, Platform, Text } from "react-native";
+import { doc, updateDoc } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
+import {
+  Alert,
+  BackHandler,
+  KeyboardAvoidingView,
+  Platform,
+  Text,
+} from "react-native";
 import Container from "../../components/container";
 import CustomButton from "../../components/customButton";
 import FormField from "../../components/formField";
 import LayoutGradient from "../../components/layoutGradient";
-import { doc, updateDoc } from "firebase/firestore";
-import { firestore } from "../../firebase/firebaseConfig";
 import { useAuthContext } from "../../contexts/authContextProvider";
+import { firestore } from "../../firebase/firebaseConfig";
 
 const AddPhone = () => {
   const { user } = useAuthContext();
 
-  const { isLoading: loadingUser, isAuthenticated } = useAuthContext();
-  if (!loadingUser && isAuthenticated && user?.phoneNumber)
-    return <Redirect href="/home" />;
-
   const [phone, setPhone] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const [formFilled, setFormFilled] = useState(false);
 
   const handleAddPhoneNo = async () => {
     try {
@@ -31,12 +35,34 @@ const AddPhone = () => {
         phoneNumber: phone,
       });
 
-      setIsLoading(false);
+      setFormFilled(true);
       router.push("/home");
     } catch (error) {
       console.log("handleAddPhoneNo Error", error);
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      () => {
+        if (!formFilled) {
+          Alert.alert("Waring!", "Please complete fields before going back.");
+          return true;
+        } else {
+          return false;
+        }
+      }
+    );
+
+    return () => backHandler.remove();
+  }, [formFilled]);
+
+  const { isLoading: loadingUser, isAuthenticated } = useAuthContext();
+  if (!loadingUser && isAuthenticated && user?.phoneNumber)
+    return <Redirect href="/home" />;
 
   return (
     <Container>

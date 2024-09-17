@@ -1,20 +1,18 @@
+import auth from "@react-native-firebase/auth";
 import { Link, Redirect, router } from "expo-router";
 import React, { useState } from "react";
 import { KeyboardAvoidingView, Platform, Text, View } from "react-native";
+import Alert from "../../components/alert";
 import Container from "../../components/container";
 import CustomButton from "../../components/customButton";
 import FormField from "../../components/formField";
 import LayoutGradient from "../../components/layoutGradient";
+import SocialButtons from "../../components/socialButtons";
 import { useAuthContext } from "../../contexts/authContextProvider";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebase/firebaseConfig";
-import Alert from "../../components/alert";
 import { FIREBASE_ERRORS } from "../../firebase/errors";
 
 const SignIn = () => {
   const { isLoading: loadingUser, isAuthenticated } = useAuthContext();
-
-  if (!loadingUser && isAuthenticated) return <Redirect href="/home" />;
 
   const [form, setForm] = useState({
     email: "",
@@ -22,6 +20,8 @@ const SignIn = () => {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+
+  if (!loadingUser && isAuthenticated) return <Redirect href="/home" />;
 
   const handleSignIn = async () => {
     try {
@@ -31,7 +31,7 @@ const SignIn = () => {
 
       setIsLoading(true);
 
-      await signInWithEmailAndPassword(auth, form.email, form.password);
+      await auth().signInWithEmailAndPassword(form.email, form.password);
 
       router.push("/home");
     } catch (error: any) {
@@ -51,9 +51,11 @@ const SignIn = () => {
       >
         <LayoutGradient invert />
 
-        <Text className="text-3xl text-white font-extrabold mb-4">
+        <Text className="text-3xl text-center text-white font-extrabold mb-4">
           Login to Jayple
         </Text>
+
+        <SocialButtons />
 
         <FormField
           title="Email"

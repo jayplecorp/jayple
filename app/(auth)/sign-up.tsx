@@ -1,21 +1,20 @@
+import auth from "@react-native-firebase/auth";
 import { Link, Redirect, router } from "expo-router";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import React, { useState } from "react";
 import { KeyboardAvoidingView, Platform, Text, View } from "react-native";
+import Alert from "../../components/alert";
 import Container from "../../components/container";
 import CustomButton from "../../components/customButton";
 import FormField from "../../components/formField";
 import LayoutGradient from "../../components/layoutGradient";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth, firestore } from "../../firebase/firebaseConfig";
-import { doc, serverTimestamp, setDoc } from "firebase/firestore";
+import SocialButtons from "../../components/socialButtons";
 import { useAuthContext } from "../../contexts/authContextProvider";
-import Alert from "../../components/alert";
 import { FIREBASE_ERRORS } from "../../firebase/errors";
+import { firestore } from "../../firebase/firebaseConfig";
 
 const SignUp = () => {
   const { isLoading: loadingUser, isAuthenticated } = useAuthContext();
-
-  if (!loadingUser && isAuthenticated) return <Redirect href="/home" />;
 
   const [form, setForm] = useState({
     name: "",
@@ -33,8 +32,7 @@ const SignUp = () => {
 
       setIsLoading(true);
 
-      const { user } = await createUserWithEmailAndPassword(
-        auth,
+      const { user } = await auth().createUserWithEmailAndPassword(
         form.email,
         form.password
       );
@@ -58,18 +56,22 @@ const SignUp = () => {
     }
   };
 
+  if (!loadingUser && isAuthenticated) return <Redirect href="/home" />;
+
   return (
     <Container>
       <KeyboardAvoidingView
         behavior="padding"
         keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
-        className="relative justify-center h-screen w-full p-5"
+        className="relative justify-center h-full w-full p-5"
       >
         <LayoutGradient />
 
-        <Text className="text-3xl text-white font-extrabold mb-4">
+        <Text className="text-3xl text-center text-white font-extrabold mb-4">
           Signup to Jayple
         </Text>
+
+        <SocialButtons />
 
         <FormField
           title="Name"

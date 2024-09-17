@@ -1,20 +1,17 @@
-import { View, Text, Platform, KeyboardAvoidingView } from "react-native";
+import auth from "@react-native-firebase/auth";
+import { Link, Redirect } from "expo-router";
 import React, { useState } from "react";
-import LayoutGradient from "../../components/layoutGradient";
-import CustomButton from "../../components/customButton";
-import { Link, Redirect, router } from "expo-router";
-import Container from "../../components/container";
-import FormField from "../../components/formField";
-import { useAuthContext } from "../../contexts/authContextProvider";
-import { sendPasswordResetEmail } from "firebase/auth";
-import { auth } from "../../firebase/firebaseConfig";
+import { KeyboardAvoidingView, Platform, Text } from "react-native";
 import Alert from "../../components/alert";
+import Container from "../../components/container";
+import CustomButton from "../../components/customButton";
+import FormField from "../../components/formField";
+import LayoutGradient from "../../components/layoutGradient";
+import { useAuthContext } from "../../contexts/authContextProvider";
 import { FIREBASE_ERRORS } from "../../firebase/errors";
 
 const ResetPassword = () => {
   const { isLoading: loadingUser, isAuthenticated } = useAuthContext();
-
-  if (!loadingUser && isAuthenticated) return <Redirect href="/home" />;
 
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -30,7 +27,7 @@ const ResetPassword = () => {
 
       setIsLoading(true);
 
-      await sendPasswordResetEmail(auth, email);
+      await auth().sendPasswordResetEmail(email);
 
       setSuccess("Password reset email has been sent!");
     } catch (error: any) {
@@ -40,6 +37,8 @@ const ResetPassword = () => {
       setIsLoading(false);
     }
   };
+
+  if (!loadingUser && isAuthenticated) return <Redirect href="/home" />;
 
   return (
     <Container>

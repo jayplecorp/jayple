@@ -41,6 +41,9 @@ const RootLayout = () => {
         screenOptions={{
           headerShown: false,
           animation: "slide_from_right",
+          contentStyle: {
+            backgroundColor: "#000000",
+          },
         }}
       >
         <Stack.Screen name="index" />

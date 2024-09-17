@@ -1,8 +1,9 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { UserData } from "../types";
-import { onAuthStateChanged } from "firebase/auth";
+import auth from "@react-native-firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
-import { auth, firestore } from "../firebase/firebaseConfig";
+import { createContext, useContext, useEffect, useState } from "react";
+import { firestore } from "../firebase/firebaseConfig";
+import { UserData } from "../types";
+
 import LoaderScreen from "../components/loaderScreen";
 
 export type AuthContextType = {
@@ -23,7 +24,7 @@ const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (u) => {
+    const unsubscribe = auth().onAuthStateChanged(async (u) => {
       if (u) {
         setIsAuthenticated(true);
 
