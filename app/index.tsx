@@ -16,6 +16,7 @@ const Onboaring = () => {
       <ImageBackground
         source={images.gradientBackdrop}
         imageStyle={{ opacity: 0.35 }}
+        className="flex items-center justify-center h-[85vh]"
       >
         <View className="flex items-center justify-center h-full w-full px-5">
           <Text className="text-3xl font-extrabold text-white mb-10">

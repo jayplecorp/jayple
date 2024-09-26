@@ -1,4 +1,4 @@
-import auth from "@react-native-firebase/auth";
+import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { createContext, useContext, useEffect, useState } from "react";
 import { firestore } from "../firebase/firebaseConfig";
@@ -37,6 +37,7 @@ const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
 
       setIsLoading(false);
     });
+    setIsLoading(false);
 
     return unsubscribe;
   }, []);

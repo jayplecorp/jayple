@@ -1,5 +1,5 @@
 import { Redirect, router } from "expo-router";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import {
   Alert,
@@ -14,9 +14,10 @@ import FormField from "../../components/formField";
 import LayoutGradient from "../../components/layoutGradient";
 import { useAuthContext } from "../../contexts/authContextProvider";
 import { firestore } from "../../firebase/firebaseConfig";
+import { UserData } from "../../types";
 
 const AddPhone = () => {
-  const { user } = useAuthContext();
+  const { user, setUser } = useAuthContext();
 
   const [phone, setPhone] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -34,6 +35,9 @@ const AddPhone = () => {
       await updateDoc(doc(firestore, `/users/${user.id}`), {
         phoneNumber: phone,
       });
+
+      const updatedUserDoc = await getDoc(doc(firestore, `/users/${user.id}`));
+      setUser({ id: updatedUserDoc.id, ...updatedUserDoc.data() } as UserData);
 
       setFormFilled(true);
       router.push("/home");

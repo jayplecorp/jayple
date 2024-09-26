@@ -51,7 +51,7 @@ const TabLayout = () => {
           tabBarIcon: ({ color, focused }) => (
             <>
               <TabBarIcon
-                name={focused ? "bookmark" : "bookmark-outline"}
+                name={focused ? "calendar" : "calendar-outline"}
                 color={color}
               />
               <Text
@@ -60,6 +60,27 @@ const TabLayout = () => {
                 } text-[12px]`}
               >
                 Bookings
+              </Text>
+            </>
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="cart"
+        options={{
+          title: "Cart",
+          tabBarIcon: ({ color, focused }) => (
+            <>
+              <TabBarIcon
+                name={focused ? "cart" : "cart-outline"}
+                color={color}
+              />
+              <Text
+                className={`mt-1 ${
+                  focused ? "text-accent" : "text-gray-500"
+                } text-[12px]`}
+              >
+                Cart
               </Text>
             </>
           ),

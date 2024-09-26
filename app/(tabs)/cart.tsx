@@ -1,13 +1,13 @@
+import { View, Text } from "react-native";
 import React from "react";
-import { Text, View } from "react-native";
 import Container from "../../components/container";
 import LottieView from "lottie-react-native";
 
-const Bookings = () => {
+const Cart = () => {
   return (
     <Container>
       <View className="p-5">
-        <Text className="text-white font-psemibold text-2xl">My Bookings</Text>
+        <Text className="text-white font-psemibold text-2xl">My Cart</Text>
 
         <View className="flex items-center justify-center h-[65vh]">
           <LottieView
@@ -17,7 +17,7 @@ const Bookings = () => {
             style={{ height: 250, width: 250 }}
           />
           <Text className="text-gray-400 font-psemibold text-xl">
-            No booking found!
+            No items in the cart!
           </Text>
         </View>
       </View>
@@ -25,4 +25,4 @@ const Bookings = () => {
   );
 };
 
-export default Bookings;
+export default Cart;
