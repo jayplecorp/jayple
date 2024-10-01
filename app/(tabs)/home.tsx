@@ -26,15 +26,22 @@ const Home = () => {
 
   return (
     <Container>
-      <View className="p-5">
-        <Text className="text-gray-100 text-2xl font-psemibold mt-3 mb-4">
-          Welcome,{" "}
-          {user?.name ? (
-            user.name + "!"
-          ) : (
-            <Text className="text-gray-400 animate-pulse">-----</Text>
-          )}
-        </Text>
+      <View className="p-5 pt-2">
+        <View className="flex flex-row items-center justify-between mb-3">
+          <View>
+            <Text className="text-accent text-lg font-psemibold">Welcome</Text>
+            <Text className="text-gray-100 text-2xl font-psemibold">
+              {user?.name ? (
+                user.name + "!"
+              ) : (
+                <Text className="text-gray-400 animate-pulse">-----</Text>
+              )}
+            </Text>
+          </View>
+
+          <View className="w-[45px] h-[45px] rounded-full bg-gray-500" />
+        </View>
+
         <TextInput
           className="flex-1 w-full h-14 px-4 bg-secondary rounded-md text-white font-psemibold text-base placeholder:text-gray-400"
           placeholder="Search"

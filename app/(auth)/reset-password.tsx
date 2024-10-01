@@ -1,7 +1,7 @@
 import auth from "@react-native-firebase/auth";
 import { Link, Redirect } from "expo-router";
 import React, { useState } from "react";
-import { KeyboardAvoidingView, Platform, Text } from "react-native";
+import { KeyboardAvoidingView, Platform, ScrollView, Text } from "react-native";
 import Alert from "../../components/alert";
 import Container from "../../components/container";
 import CustomButton from "../../components/customButton";
@@ -9,6 +9,8 @@ import FormField from "../../components/formField";
 import LayoutGradient from "../../components/layoutGradient";
 import { useAuthContext } from "../../contexts/authContextProvider";
 import { FIREBASE_ERRORS } from "../../firebase/errors";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { StatusBar } from "expo-status-bar";
 
 const ResetPassword = () => {
   const { isLoading: loadingUser, isAuthenticated } = useAuthContext();
@@ -41,49 +43,56 @@ const ResetPassword = () => {
   if (!loadingUser && isAuthenticated) return <Redirect href="/home" />;
 
   return (
-    <Container>
-      <KeyboardAvoidingView
-        behavior="padding"
-        keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
-        className="relative justify-center h-full w-full p-5"
-      >
-        <LayoutGradient />
+    <SafeAreaView className="bg-primary flex-1">
+      <ScrollView contentContainerStyle={{ height: "100%" }}>
+        <KeyboardAvoidingView
+          behavior="padding"
+          keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
+          className="relative justify-center h-full w-full p-5"
+        >
+          <LayoutGradient />
 
-        <Text className="text-3xl text-white font-extrabold mb-4">
-          Reset your password
-        </Text>
+          <Text className="text-3xl text-white font-extrabold mb-4">
+            Reset your password
+          </Text>
 
-        <FormField
-          title="Email"
-          value={email}
-          handleChangeText={(e) => setEmail(e)}
-          containerStyles="mt-4"
-          placeholder="Your Email"
-        />
+          <FormField
+            title="Email"
+            value={email}
+            handleChangeText={(e) => setEmail(e)}
+            containerStyles="mt-4"
+            placeholder="Your Email"
+          />
 
-        {(error || success) && (
-          <Alert severity={error ? "error" : "success"}>
-            {error
-              ? FIREBASE_ERRORS[error as keyof typeof FIREBASE_ERRORS] ??
-                "Error, Try again later!"
-              : success}
-          </Alert>
-        )}
+          {(error || success) && (
+            <Alert severity={error ? "error" : "success"}>
+              {error
+                ? FIREBASE_ERRORS[error as keyof typeof FIREBASE_ERRORS] ??
+                  "Error, Try again later!"
+                : success}
+            </Alert>
+          )}
 
-        <CustomButton
-          title="Send Reset Email"
-          containerStyle="mt-7"
-          isLoading={isLoading}
-          handlePress={() => handleResetPassword()}
-        />
+          <CustomButton
+            title="Send Reset Email"
+            containerStyle="mt-7"
+            isLoading={isLoading}
+            handlePress={() => handleResetPassword()}
+          />
 
-        <Link href="/sign-in" className="text-lg text-center mt-3 text-accent">
-          Go back to Login
-        </Link>
+          <Link
+            href="/sign-in"
+            className="text-lg text-center mt-3 text-accent"
+          >
+            Go back to Login
+          </Link>
 
-        <LayoutGradient isFooter />
-      </KeyboardAvoidingView>
-    </Container>
+          <LayoutGradient isFooter />
+        </KeyboardAvoidingView>
+      </ScrollView>
+
+      <StatusBar backgroundColor="transparent" style="light" />
+    </SafeAreaView>
   );
 };
 

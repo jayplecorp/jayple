@@ -12,8 +12,11 @@ export type UserData = {
 export type Salon = {
   id: number;
   shopName: string;
+  shopLogo: string;
   shopImageURL: string;
   bio: string;
+  street: string;
+  location: string;
   type: string;
   shopStatus: string;
   startTime: string;

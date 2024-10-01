@@ -8,7 +8,7 @@ const Container = ({ children }: { children: React.ReactNode }) => {
     <SafeAreaView className="bg-primary flex-1">
       <ScrollView>{children}</ScrollView>
 
-      <StatusBar backgroundColor="#000000" style="inverted" />
+      <StatusBar backgroundColor="transparent" style="light" />
     </SafeAreaView>
   );
 };

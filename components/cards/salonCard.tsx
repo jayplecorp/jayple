@@ -46,6 +46,13 @@ const SalonCard: React.FC<SalonCardProps> = ({ salon, styles, separators }) => {
           {salon.shopName}
         </Text>
 
+        <View className="flex flex-row items-center">
+          <Ionicons name="location" color="#ffffff" size={15} />
+          <Text className="text-gray-400 ml-1 font-semibold">
+            {salon.street}
+          </Text>
+        </View>
+
         <View className="flex flex-row items-center mt-2">
           <TouchableOpacity className="bg-secondary-100 p-3 mr-2 rounded-md">
             <Ionicons name="bookmark-outline" color="#fff" size={28} />

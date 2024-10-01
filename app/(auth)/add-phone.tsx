@@ -6,6 +6,7 @@ import {
   BackHandler,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
   Text,
 } from "react-native";
 import Container from "../../components/container";
@@ -15,6 +16,8 @@ import LayoutGradient from "../../components/layoutGradient";
 import { useAuthContext } from "../../contexts/authContextProvider";
 import { firestore } from "../../firebase/firebaseConfig";
 import { UserData } from "../../types";
+import { StatusBar } from "expo-status-bar";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const AddPhone = () => {
   const { user, setUser } = useAuthContext();
@@ -69,36 +72,40 @@ const AddPhone = () => {
     return <Redirect href="/home" />;
 
   return (
-    <Container>
-      <KeyboardAvoidingView
-        behavior="padding"
-        keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
-        className="relative justify-center h-full w-full p-5"
-      >
-        <LayoutGradient />
+    <SafeAreaView className="bg-primary flex-1">
+      <ScrollView contentContainerStyle={{ height: "100%" }}>
+        <KeyboardAvoidingView
+          behavior="padding"
+          keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
+          className="relative justify-center h-full w-full p-5"
+        >
+          <LayoutGradient />
 
-        <Text className="text-3xl text-white font-extrabold mb-4">
-          Add your phone
-        </Text>
+          <Text className="text-3xl text-white font-extrabold mb-4">
+            Add your phone
+          </Text>
 
-        <FormField
-          title="Phone"
-          value={phone}
-          handleChangeText={(e) => setPhone(e)}
-          containerStyles="mt-4"
-          placeholder="Your Phone Number"
-        />
+          <FormField
+            title="Phone"
+            value={phone}
+            handleChangeText={(e) => setPhone(e)}
+            containerStyles="mt-4"
+            placeholder="Your Phone Number"
+          />
 
-        <CustomButton
-          title="Add Phone"
-          containerStyle="mt-7"
-          isLoading={isLoading}
-          handlePress={() => handleAddPhoneNo()}
-        />
+          <CustomButton
+            title="Add Phone"
+            containerStyle="mt-7"
+            isLoading={isLoading}
+            handlePress={() => handleAddPhoneNo()}
+          />
 
-        <LayoutGradient isFooter />
-      </KeyboardAvoidingView>
-    </Container>
+          <LayoutGradient isFooter />
+        </KeyboardAvoidingView>
+      </ScrollView>
+
+      <StatusBar backgroundColor="transparent" style="light" />
+    </SafeAreaView>
   );
 };
 

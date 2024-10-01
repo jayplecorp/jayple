@@ -28,13 +28,13 @@ const SalonType = () => {
               source={{
                 uri: "https://cdn.shopify.com/s/files/1/0013/3536/1603/files/Barber_Leaning_On_Barber_Chair.jpg",
               }}
-              className="w-[150px] h-[150px] rounded-md"
+              className="w-[150px] h-full rounded-md"
             />
             <View className="flex flex-1 p-2">
               <Text className="text-white font-semibold text-xl">
                 Economical
               </Text>
-              <Text className="text-gray-400 font-semibold text-[16px]">
+              <Text className="text-gray-400 font-semibold text-[15px]">
                 Sai salon | Baba | MrCut | Vikram | Perfect Cut
               </Text>
 
@@ -57,11 +57,11 @@ const SalonType = () => {
               source={{
                 uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmAUgbhf1gMBnaWjQXU5_VTdAWu61V6K_cY8VPuSeSJ5JpLwzE2o3zN3CbNZh-OyYhpzA&usqp=CAU",
               }}
-              className="w-[150px] h-[150px] rounded-md"
+              className="w-[150px] h-full rounded-md"
             />
             <View className="flex flex-1 p-2">
               <Text className="text-white font-semibold text-xl">Prime</Text>
-              <Text className="text-gray-400 font-semibold text-[16px]">
+              <Text className="text-gray-400 font-semibold text-[15px]">
                 Top one | Thanvi | Academic singles | Fiona
               </Text>
 
@@ -84,11 +84,11 @@ const SalonType = () => {
               source={{
                 uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-_JMKQWByzTxTh0INRsLSRiAcc0AN6et3_g&s",
               }}
-              className="w-[150px] h-[150px] rounded-md"
+              className="w-[150px] h-full rounded-md"
             />
             <View className="flex flex-1 p-2">
               <Text className="text-white font-semibold text-xl">Luxury</Text>
-              <Text className="text-gray-400 font-semibold text-[16px]">
+              <Text className="text-gray-400 font-semibold text-[15px]">
                 Naturals | Lakme | Green trends | Lo'real
               </Text>
 

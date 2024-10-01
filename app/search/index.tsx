@@ -1,8 +1,8 @@
 import { View, Text, TextInput } from "react-native";
 import React, { useState } from "react";
-import Container from "../components/container";
-import { categories } from "../constants/data";
-import CategoryCard from "../components/cards/categoryCard";
+import Container from "../../components/container";
+import { categories } from "../../constants/data";
+import CategoryCard from "../../components/cards/categoryCard";
 import { TouchableOpacity } from "react-native";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
@@ -12,7 +12,7 @@ const Search = () => {
 
   return (
     <Container>
-      <View className="p-5">
+      <View className="p-5 pt-2">
         <View className="flex flex-row items-center mb-4">
           <TouchableOpacity
             className="bg-secondary w-[40px] h-[40px] rounded-full flex items-center justify-center"

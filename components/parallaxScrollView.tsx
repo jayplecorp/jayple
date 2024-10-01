@@ -60,14 +60,19 @@ const ParallaxScrollView: React.FC<ParallaxScrollViewProps> = ({
         >
           {headerImage}
 
-          <TouchableOpacity
-            className="absolute top-[40px] left-[20px] w-[40px] h-[40px] bg-white rounded-full flex items-center justify-center"
-            onPress={() => router.back()}
-          >
-            <Ionicons name="arrow-back" size={20} />
-          </TouchableOpacity>
+          <View className="absolute top-[40px] left-0 px-6 w-full flex flex-row items-center justify-between">
+            <TouchableOpacity
+              className="w-[40px] h-[40px] bg-white rounded-full flex items-center justify-center"
+              onPress={() => router.back()}
+            >
+              <Ionicons name="arrow-back" size={20} />
+            </TouchableOpacity>
+            <TouchableOpacity className="w-[40px] h-[40px] bg-white rounded-full flex items-center justify-center">
+              <Ionicons name="bookmark-outline" size={20} />
+            </TouchableOpacity>
+          </View>
         </Animated.View>
-        <View className="flex-1 p-5 bg-primary rounded-2xl z-20 overflow-hidden">
+        <View className="flex-1 p-5 bg-primary rounded-2xl z-20">
           {children}
         </View>
       </Animated.ScrollView>

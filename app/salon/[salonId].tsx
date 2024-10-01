@@ -24,18 +24,30 @@ const SalonScreen = () => {
         />
       }
     >
-      <Text className="text-white font-semibold text-3xl">
+      <View className="absolute top-[-70px] left-[38%] w-[140px] h-[140px] bg-black rounded-full flex items-center justify-center">
+        <Image
+          source={{ uri: salon.shopLogo }}
+          className="w-[120px] h-[120px] rounded-full"
+        />
+      </View>
+      <Text className="text-white font-semibold text-3xl mt-10">
         {salon.shopName}
       </Text>
 
-      <View className="flex flex-row items-center">
+      <Text className="text-gray-400 text-[15px] mt-1">{salon.bio}</Text>
+
+      <View className="flex flex-row items-center mt-3">
         <Ionicons name="time" color="#ffffff" size={15} />
         <Text className="text-gray-400 ml-1 font-semibold">
           {salon.startTime} - {salon.endTime}
         </Text>
       </View>
-
-      <Text className="text-gray-400 text-[15px] mt-3">{salon.bio}</Text>
+      <View className="flex flex-row mt-1">
+        <Ionicons name="location" color="#ffffff" size={15} />
+        <Text className="text-gray-400 ml-1 font-semibold">
+          {salon.location}
+        </Text>
+      </View>
 
       <Text className="text-white font-semibold text-2xl mt-5">
         Our Services

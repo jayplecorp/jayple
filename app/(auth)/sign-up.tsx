@@ -131,7 +131,7 @@ const SignUp = () => {
         </KeyboardAvoidingView>
       </ScrollView>
 
-      <StatusBar backgroundColor="#000000" style="inverted" />
+      <StatusBar backgroundColor="transparent" style="light" />
     </SafeAreaView>
   );
 };
