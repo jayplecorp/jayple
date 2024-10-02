@@ -16,6 +16,7 @@ import LoaderScreen from "../../components/loaderScreen";
 import { categories, topratedSaloons } from "../../constants/data";
 import { useAuthContext } from "../../contexts/authContextProvider";
 import CategoryCard from "../../components/cards/categoryCard";
+import images from "../../constants/images";
 
 const Home = () => {
   const { user, isLoading } = useAuthContext();
@@ -39,7 +40,10 @@ const Home = () => {
             </Text>
           </View>
 
-          <View className="w-[45px] h-[45px] rounded-full bg-gray-500" />
+          <Image
+            source={images.logo}
+            className="w-[45px] h-[45px] rounded-full bg-gray-500/20"
+          />
         </View>
 
         <TextInput

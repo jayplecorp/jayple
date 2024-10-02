@@ -41,6 +41,8 @@ export const cartData = [
     shopName: "Lakme Salon",
     shopLogo:
       "https://5.imimg.com/data5/SELLER/Default/2022/8/MT/DQ/JT/157546034/lakme-beauty-salon-500x500.jpg",
+    location:
+      "7th Cross St W, Thillai Nagar East, West Thillai Nagar, Thillai Nagar, Tiruchirappalli, Tamil Nadu 620018",
     services: [
       {
         id: 1,
@@ -63,6 +65,8 @@ export const cartData = [
     shopName: "Toni & Guy",
     shopLogo:
       "https://toniandguy.ph/cdn/shop/files/TONI_GUY_Only_Black_Square.jpg",
+    location:
+      "Ground Floor, Balaji Nagar, Bus Stop, Unicure Corporation Plot No:6 Vel's Arcade, Pappakurichi Kattur, Tiruchirappalli, Tamil Nadu 620019",
     services: [
       {
         id: 1,

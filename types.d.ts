@@ -30,3 +30,11 @@ export type Category = {
   imageURL: string;
   price: number;
 };
+
+export type CartData = {
+  id: number;
+  shopName: string;
+  shopLogo: string;
+  location: string;
+  services: Category[];
+};
