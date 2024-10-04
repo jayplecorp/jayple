@@ -9,10 +9,10 @@ import {
   ScrollView,
 } from "react-native";
 import React, { useState } from "react";
-import DatePicker, { getToday } from "react-native-modern-datepicker";
 import { Ionicons } from "@expo/vector-icons";
 import TimeSlot from "../cards/timeSlot";
 import { CartData } from "../../types";
+import moment from "moment";
 
 interface BookingModalProps {
   modalVisible: boolean;
@@ -27,7 +27,9 @@ const BookingModal: React.FC<BookingModalProps> = ({
   closeModal,
   cart,
 }) => {
-  const [selectedDate, setSelectedDate] = useState(getToday);
+  const [selectedDate, setSelectedDate] = useState(
+    moment().format("YYYY-MM-DD")
+  );
   const [selectedSlot, setSelectedSlot] = useState("");
   const [timeSlots, setTimeSlots] = useState([
     { time: "10:00 AM", available: true },
@@ -42,6 +44,20 @@ const BookingModal: React.FC<BookingModalProps> = ({
   const totPrice = cart.services.reduce((sum, item) => sum + item.price, 0);
   const discount = (totPrice / 100) * 20;
 
+  const generateDates = () => {
+    const dates = [];
+    const startDate = moment();
+
+    // Generate 30 future dates
+    for (let i = 0; i < 30; i++) {
+      dates.push(moment(startDate).add(i, "days").format("YYYY-MM-DD"));
+    }
+
+    return dates;
+  };
+
+  const [availableDates, setAvailableDates] = useState(generateDates());
+
   return (
     <View className="flex-1 items-center justify-center">
       <Modal
@@ -54,37 +70,19 @@ const BookingModal: React.FC<BookingModalProps> = ({
       >
         <View className="flex-1 bg-secondary p-5">
           <ScrollView>
-            <View className="flex flex-row items-center justify-between mb-6">
-              <Text className="text-2xl font-semibold text-white">
-                Select Date & Slot
-              </Text>
-              <TouchableOpacity
-                className="bg-secondary-100 w-[30px] h-[30px] flex items-center justify-center rounded-full"
-                onPress={() => closeModal()}
-              >
-                <Ionicons name="close" color="#ffffff" size={25} />
-              </TouchableOpacity>
-            </View>
+            <View>
+              <View className="flex flex-row items-center justify-between mb-4">
+                <Text className="text-2xl font-semibold text-white">
+                  Select Date
+                </Text>
+                <TouchableOpacity
+                  className="bg-secondary-100 w-[30px] h-[30px] flex items-center justify-center rounded-full"
+                  onPress={() => closeModal()}
+                >
+                  <Ionicons name="close" color="#ffffff" size={25} />
+                </TouchableOpacity>
+              </View>
 
-            <DatePicker
-              mode="calendar"
-              selected={selectedDate}
-              // current={}
-              onSelectedChange={(date) => setSelectedDate(date)}
-              options={{
-                borderColor: "#2f353d",
-                backgroundColor: "#2a2a2a",
-                mainColor: "#DB4437",
-                textDefaultColor: "#fff",
-                textHeaderColor: "#fff",
-                textSecondaryColor: "#CDCDE0",
-              }}
-            />
-
-            <View className="mt-5">
-              <Text className="text-2xl text-white font-semibold mb-3">
-                Available Time Slots
-              </Text>
               <FlatList
                 ItemSeparatorComponent={
                   Platform.OS !== "android" &&
@@ -93,20 +91,46 @@ const BookingModal: React.FC<BookingModalProps> = ({
                   ))
                 }
                 horizontal={true}
-                data={timeSlots}
+                data={availableDates}
                 renderItem={({ item, index, separators }) => (
-                  <TimeSlot
+                  <TouchableOpacity
                     key={index}
-                    timeSlot={item}
-                    selectedSlot={selectedSlot}
-                    setSelectedSlot={setSelectedSlot}
-                  />
+                    className={`${
+                      item === selectedDate ? "bg-accent" : "bg-secondary-100"
+                    } h-[35px] w-[35px] flex items-center justify-center rounded-full mr-2`}
+                    onPress={() => setSelectedDate(item)}
+                  >
+                    <Text
+                      className={`${
+                        item === selectedDate ? "font-bold" : "font-normal"
+                      } text-white`}
+                    >
+                      {item?.slice(8, 10)}
+                    </Text>
+                  </TouchableOpacity>
                 )}
               />
             </View>
 
-            <View className="mt-5">
-              <Text className="text-2xl text-white font-semibold mb-3">
+            <View className="mt-6">
+              <Text className="text-2xl text-white font-semibold mb-4">
+                Available Time Slots
+              </Text>
+
+              <View className="flex flex-row flex-wrap justify-between">
+                {timeSlots.map((slot, index) => (
+                  <TimeSlot
+                    key={index}
+                    timeSlot={slot}
+                    selectedSlot={selectedSlot}
+                    setSelectedSlot={setSelectedSlot}
+                  />
+                ))}
+              </View>
+            </View>
+
+            <View className="mt-3">
+              <Text className="text-2xl text-white font-semibold mb-4">
                 Order details
               </Text>
 
@@ -127,7 +151,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
                 </View>
               </View>
 
-              <View className="mt-2">
+              <View className="mt-3 mb-3">
                 <Text className="text-white text-xl font-semibold">
                   Services
                 </Text>
@@ -161,7 +185,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
               </View>
 
               <TouchableOpacity
-                className="bg-accent flex items-center justify-center p-3 rounded-md mt-3"
+                className="bg-accent flex items-center justify-center p-3 rounded-md"
                 onPress={() => {}}
               >
                 <Text className="text-white text-lg font-bold">

@@ -26,7 +26,7 @@ const TimeSlot: React.FC<TimeSlotProps> = ({
           : timeSlot.available
           ? "bg-secondary-100"
           : "bg-secondary-100 opacity-30"
-      } mr-2 p-4 rounded-md`}
+      } mr-2 mb-3 p-4 rounded-md`}
       activeOpacity={1}
       disabled={!timeSlot.available}
       onPress={() => handleSelectSlot()}
