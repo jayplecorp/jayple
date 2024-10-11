@@ -47,8 +47,6 @@ const RootLayout = () => {
         <Stack.Screen name="(auth)" />
         <Stack.Screen name="search/index" />
         <Stack.Screen name="salon/[salonId]" />
-        <Stack.Screen name="[gender]/index" />
-        <Stack.Screen name="[gender]/[salonType]" />
       </Stack>
     </AuthContextProvider>
   );

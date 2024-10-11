@@ -55,14 +55,14 @@ const Home = () => {
 
         <View className="flex flex-row pt-5 gap-3">
           <TouchableOpacity
-            onPress={() => router.push("/men")}
+            onPress={() => router.push("/search/men")}
             className="bg-secondary flex-1 items-center justify-center gap-2 py-4 rounded"
           >
             <Ionicons name="male" size={32} color="#555658" />
             <Text className="text-gray-100 text-xl font-psemibold">Men</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => router.push("/women")}
+            onPress={() => router.push("/search/women")}
             className="bg-secondary flex-1 items-center justify-center gap-2 py-4 rounded"
           >
             <Ionicons name="female" size={32} color="#555658" />

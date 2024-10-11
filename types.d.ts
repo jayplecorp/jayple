@@ -6,7 +6,23 @@ export type UserData = {
   email: string;
   phoneNumber: string;
   imageURL: string;
+  type: "admin" | "vendor" | "user";
+  cover?: string;
+  street?: string;
+  location?: string;
+  bio?: string;
+  category?: "economical" | "prime" | "luxury";
+  startTime?: string;
+  endTime?: string;
+  status?: "open" | "closed";
+  isPublished?: boolean;
+  services?: {
+    id: string;
+    price: number;
+    duration: number;
+  }[];
   createdAt: Timestamp;
+  updatedAt?: Timestamp;
 };
 
 export type Salon = {
@@ -25,10 +41,10 @@ export type Salon = {
 };
 
 export type Category = {
-  id: number;
-  name: string;
-  imageURL: string;
-  price: number;
+  id: number | string;
+  serviceName: string;
+  serviceImageURL: string;
+  price?: number;
 };
 
 export type CartData = {

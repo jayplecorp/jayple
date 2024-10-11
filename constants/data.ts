@@ -46,15 +46,15 @@ export const cartData = [
     services: [
       {
         id: 1,
-        name: "Haircut",
-        imageURL:
+        serviceName: "Haircut",
+        serviceImageURL:
           "https://images.pexels.com/photos/1570807/pexels-photo-1570807.jpeg",
         price: 200,
       },
       {
         id: 2,
-        name: "Beard Trim",
-        imageURL:
+        serviceName: "Beard Trim",
+        serviceImageURL:
           "https://images.pexels.com/photos/7518723/pexels-photo-7518723.jpeg",
         price: 100,
       },
@@ -70,8 +70,8 @@ export const cartData = [
     services: [
       {
         id: 1,
-        name: "Haircut",
-        imageURL:
+        serviceName: "Haircut",
+        serviceImageURL:
           "https://images.pexels.com/photos/1570807/pexels-photo-1570807.jpeg",
         price: 200,
       },
@@ -82,43 +82,43 @@ export const cartData = [
 export const categories = [
   {
     id: 1,
-    name: "Haircut",
-    imageURL:
+    serviceName: "Haircut",
+    serviceImageURL:
       "https://images.pexels.com/photos/1570807/pexels-photo-1570807.jpeg",
     price: 200,
   },
   {
     id: 2,
-    name: "Beard Trim",
-    imageURL:
+    serviceName: "Beard Trim",
+    serviceImageURL:
       "https://images.pexels.com/photos/7518723/pexels-photo-7518723.jpeg",
     price: 200,
   },
   {
     id: 3,
-    name: "Manicure",
-    imageURL:
+    serviceName: "Manicure",
+    serviceImageURL:
       "https://images.pexels.com/photos/704815/pexels-photo-704815.jpeg",
     price: 200,
   },
   {
     id: 4,
-    name: "Pedicure",
-    imageURL:
+    serviceName: "Pedicure",
+    serviceImageURL:
       "https://cdn.pixabay.com/photo/2021/01/06/09/13/feet-5893686_960_720.jpg",
     price: 200,
   },
   {
     id: 5,
-    name: "Facials",
-    imageURL:
+    serviceName: "Facials",
+    serviceImageURL:
       "https://images.pexels.com/photos/5069412/pexels-photo-5069412.jpeg",
     price: 200,
   },
   {
     id: 6,
-    name: "Hair color",
-    imageURL:
+    serviceName: "Hair color",
+    serviceImageURL:
       "https://cdn.pixabay.com/photo/2018/04/03/23/04/woman-3288365_1280.jpg",
     price: 200,
   },

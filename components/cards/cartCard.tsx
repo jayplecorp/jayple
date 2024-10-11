@@ -55,7 +55,7 @@ const CartCard: React.FC<CartCardProps> = ({
 
           {cart.services.map((service) => (
             <Text key={service.id} className="text-gray-400 text-lg font-bold">
-              {service.name}
+              {service.serviceName}
             </Text>
           ))}
         </View>
@@ -69,7 +69,7 @@ const CartCard: React.FC<CartCardProps> = ({
             className="flex flex-row items-center justify-between mt-1"
           >
             <Text className="text-gray-400 text-lg font-bold">
-              {service.name}
+              {service.serviceName}
             </Text>
             <Text className="text-gray-400 text-lg font-bold">
               1 x {service.price} = ₹{1 * service.price}

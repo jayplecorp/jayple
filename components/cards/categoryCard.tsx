@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { Category } from "../../types";
 import { Ionicons } from "@expo/vector-icons";
+import { placeHolderImg } from "../../constants";
 
 interface CategoryCardProps {
   category: Category;
@@ -35,13 +36,13 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
       <View className={`bg-secondary rounded-md w-[180px] mb-4 ${styles}`}>
         <Image
           source={{
-            uri: category.imageURL,
+            uri: category.serviceImageURL ?? placeHolderImg,
           }}
           className="h-[140px] w-full rounded-md"
         />
         <View className="p-3">
           <Text className="text-white font-semibold text-xl">
-            {category.name}
+            {category.serviceName}
           </Text>
 
           {isSalonPage && (

@@ -1,3 +1,4 @@
+import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { ActivityIndicator, Text, TouchableOpacity } from "react-native";
 
@@ -6,7 +7,9 @@ interface CustomButtonProps {
   containerStyle?: string;
   textStyle?: string;
   handlePress?: () => void;
+  icon?: string;
   isLoading?: boolean;
+  disabled?: boolean;
 }
 
 const CustomButton: React.FC<CustomButtonProps> = ({
@@ -14,13 +17,17 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   containerStyle,
   textStyle,
   handlePress,
+  icon,
   isLoading,
+  disabled,
 }) => {
   return (
     <TouchableOpacity
-      className={`min-h-[55px] bg-accent flex flex-row items-center justify-center w-full rounded ${containerStyle} disabled:bg-opacity-60`}
+      className={`h-[55px] bg-accent flex flex-row items-center justify-center w-full rounded ${containerStyle} ${
+        disabled || isLoading ? "opacity-30" : ""
+      }`}
       onPress={handlePress}
-      disabled={isLoading}
+      disabled={disabled || isLoading}
     >
       {isLoading && (
         <ActivityIndicator
@@ -28,6 +35,15 @@ const CustomButton: React.FC<CustomButtonProps> = ({
           color="#fff"
           size="small"
           className="mr-2"
+        />
+      )}
+
+      {icon && (
+        <Ionicons
+          name={icon as any}
+          color="#fff"
+          size={28}
+          style={{ marginRight: 4 }}
         />
       )}
 

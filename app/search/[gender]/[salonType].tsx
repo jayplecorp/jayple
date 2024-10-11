@@ -1,10 +1,10 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
-import Container from "../../components/container";
+import Container from "../../../components/container";
 import { router, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { topratedSaloons } from "../../constants/data";
-import SalonCard from "../../components/cards/salonCard";
+import { topratedSaloons } from "../../../constants/data";
+import SalonCard from "../../../components/cards/salonCard";
 import LottieView from "lottie-react-native";
 
 const SalonType = () => {
@@ -40,7 +40,7 @@ const SalonType = () => {
         ) : (
           <View className="flex items-center justify-center h-[65vh]">
             <LottieView
-              source={require("../../assets/images/no-result.json")}
+              source={require("../../../assets/images/no-result.json")}
               autoPlay
               loop
               style={{ height: 250, width: 250 }}

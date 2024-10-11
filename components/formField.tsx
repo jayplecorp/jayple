@@ -8,6 +8,7 @@ interface FormFieldProps {
   value: string;
   handleChangeText: (e: any) => void;
   placeholder?: string;
+  textarea?: boolean;
 }
 
 const FormField: React.FC<FormFieldProps> = ({
@@ -16,6 +17,7 @@ const FormField: React.FC<FormFieldProps> = ({
   value,
   handleChangeText,
   placeholder,
+  textarea,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -25,12 +27,17 @@ const FormField: React.FC<FormFieldProps> = ({
         <Text className="text-base text-gray-100 font-medium">{title}</Text>
       )}
 
-      <View className="w-full h-14 px-4 bg-secondary rounded-md focus:border-accent flex flex-row items-center">
+      <View
+        className={`w-full ${
+          textarea ? "py-3.5" : "h-14"
+        }  px-4 bg-secondary rounded-md focus:border-accent flex flex-row items-center`}
+      >
         <TextInput
           className="flex-1 h-full text-white font-psemibold text-base placeholder:text-gray-400"
           placeholder={placeholder}
           placeholderTextColor="#555658"
           value={value}
+          multiline={textarea ?? false}
           onChangeText={handleChangeText}
           keyboardType={title === "Email" ? "email-address" : "default"}
           secureTextEntry={title === "Password" && !showPassword}

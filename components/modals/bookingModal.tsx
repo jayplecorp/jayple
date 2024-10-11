@@ -161,7 +161,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
                     className="flex flex-row items-center justify-between mt-1"
                   >
                     <Text className="text-gray-400 text-lg font-bold">
-                      {service.name}
+                      {service.serviceName}
                     </Text>
                     <Text className="text-gray-400 text-lg font-bold">
                       1 x {service.price} = ₹{1 * service.price}
