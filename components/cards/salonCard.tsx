@@ -1,18 +1,17 @@
-import {
-  View,
-  Text,
-  TouchableHighlight,
-  Image,
-  TouchableOpacityBase,
-  TouchableOpacity,
-} from "react-native";
-import React from "react";
-import { Salon } from "../../types";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
+import React from "react";
+import {
+  Image,
+  Text,
+  TouchableHighlight,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { Salon, UserData } from "../../types";
 
 interface SalonCardProps {
-  salon: Salon;
+  salon: UserData;
   styles?: string;
   separators?: {
     highlight: () => void;
@@ -31,19 +30,20 @@ const SalonCard: React.FC<SalonCardProps> = ({ salon, styles, separators }) => {
     >
       <View className={`bg-secondary p-3 mr-3 rounded-md ${styles}`}>
         <Image
-          source={{ uri: salon.shopImageURL }}
+          source={{ uri: salon.cover }}
           className="w-full h-[200px] rounded-md"
         />
         <View className="flex flex-row items-center mt-2">
           <Text className="text-accent uppercase font-semibold text-xs">
-            {salon.shopStatus} |{" "}
+            {salon.status}
           </Text>
           <Text className="text-gray-400 font-semibold text-xs">
-            {salon.startTime} - {salon.endTime}
+            {" "}
+            | {salon.startTime} - {salon.endTime}
           </Text>
         </View>
         <Text className="text-white font-semibold mt-1 text-lg">
-          {salon.shopName}
+          {salon.name}
         </Text>
 
         <View className="flex flex-row items-center">
@@ -59,7 +59,7 @@ const SalonCard: React.FC<SalonCardProps> = ({ salon, styles, separators }) => {
           </TouchableOpacity>
           <TouchableOpacity
             className="bg-accent p-3 flex-1 flex items-center justify-center rounded-md"
-            onPress={() => router.push(`/salon/${salon.id}`)}
+            onPress={() => router.push(`/vendor/${salon.id}`)}
           >
             <Text className="text-white font-bold text-lg">Book Now</Text>
           </TouchableOpacity>

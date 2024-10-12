@@ -6,6 +6,7 @@ import { useAuthContext } from "../../contexts/authContextProvider";
 import LoaderScreen from "../../components/loaderScreen";
 import { Ionicons } from "@expo/vector-icons";
 import Container from "../../components/container";
+import { placeHolderImg } from "../../constants";
 
 const MyProfile = () => {
   const { user, isLoading } = useAuthContext();
@@ -17,6 +18,14 @@ const MyProfile = () => {
   return (
     <Container>
       <View className="flex h-full w-full bg-primary p-5">
+        {user?.type === "vendor" && (
+          <Image
+            source={{
+              uri: user?.cover ?? placeHolderImg,
+            }}
+            className="w-full h-[100px] rounded-xl"
+          />
+        )}
         <View className="flex flex-row items-center py-3">
           {user?.imageURL ? (
             <Image

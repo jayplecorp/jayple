@@ -1,18 +1,43 @@
-import { View, Text, TouchableOpacity } from "react-native";
-import React from "react";
-import Container from "../../../components/container";
-import { router, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { topratedSaloons } from "../../../constants/data";
-import SalonCard from "../../../components/cards/salonCard";
+import { router, useLocalSearchParams } from "expo-router";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import LottieView from "lottie-react-native";
+import React, { useEffect, useState } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
+import SalonCard from "../../../components/cards/salonCard";
+import Container from "../../../components/container";
+import SalonSkeleton from "../../../components/skeletons/salonSkeleton";
+import { firestore } from "../../../firebase/firebaseConfig";
 
 const SalonType = () => {
   const { gender, salonType } = useLocalSearchParams();
+  const [salons, setSalons] = useState([]);
+  const [isSalonsLoading, setIsSalonsLoading] = useState(true);
 
-  const filteredSalons = topratedSaloons.filter(
-    (item) => item.type === salonType
-  );
+  const getFilteredSalons = async () => {
+    try {
+      const salonQ = query(
+        collection(firestore, "/users"),
+        where("type", "==", "vendor"),
+        where("category", "==", salonType),
+        where("isPublished", "==", true)
+      );
+      const salonDocs = await getDocs(salonQ);
+      const salons = salonDocs.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setSalons(salons);
+    } catch (error) {
+      console.log("getSalons Error", error);
+    } finally {
+      setIsSalonsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getFilteredSalons();
+  }, []);
 
   return (
     <Container>
@@ -31,24 +56,38 @@ const SalonType = () => {
           </Text>
         </View>
 
-        {filteredSalons.length > 0 ? (
+        {isSalonsLoading ? (
           <View>
-            {filteredSalons.map((salon) => (
-              <SalonCard key={salon.id} salon={salon} styles="w-full mt-5" />
+            {Array.from({ length: 2 }).map((_, i) => (
+              <SalonSkeleton key={i} styles="w-full mt-5" />
             ))}
           </View>
         ) : (
-          <View className="flex items-center justify-center h-[65vh]">
-            <LottieView
-              source={require("../../../assets/images/no-result.json")}
-              autoPlay
-              loop
-              style={{ height: 250, width: 250 }}
-            />
-            <Text className="text-gray-400 font-psemibold text-xl">
-              No results found!
-            </Text>
-          </View>
+          <>
+            {salons.length > 0 ? (
+              <View>
+                {salons.map((salon) => (
+                  <SalonCard
+                    key={salon.id}
+                    salon={salon}
+                    styles="w-full mt-5"
+                  />
+                ))}
+              </View>
+            ) : (
+              <View className="flex items-center justify-center h-[65vh]">
+                <LottieView
+                  source={require("../../../assets/images/no-result.json")}
+                  autoPlay
+                  loop
+                  style={{ height: 250, width: 250 }}
+                />
+                <Text className="text-gray-400 font-psemibold text-xl">
+                  No results found!
+                </Text>
+              </View>
+            )}
+          </>
         )}
       </View>
     </Container>

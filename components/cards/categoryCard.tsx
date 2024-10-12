@@ -13,6 +13,7 @@ import { placeHolderImg } from "../../constants";
 interface CategoryCardProps {
   category: Category;
   isSalonPage?: boolean;
+  servicePrice?: number;
   styles?: string;
   separators?: {
     highlight: () => void;
@@ -24,6 +25,7 @@ interface CategoryCardProps {
 const CategoryCard: React.FC<CategoryCardProps> = ({
   category,
   isSalonPage,
+  servicePrice,
   styles,
   separators,
 }) => {
@@ -48,7 +50,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
           {isSalonPage && (
             <View className="flex flex-row items-center justify-between mt-2">
               <Text className="text-accent text-xl font-psemibold">
-                ₹{category.price}
+                ₹{servicePrice}
               </Text>
               <TouchableOpacity
                 className="bg-accent w-[33px] h-[33px] flex items-center justify-center rounded-full border border-white/20"

@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import React from "react";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
 import {
   FlatList,
   Image,
@@ -10,16 +11,66 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import CategoryCard from "../../components/cards/categoryCard";
 import SalonCard from "../../components/cards/salonCard";
 import Container from "../../components/container";
 import LoaderScreen from "../../components/loaderScreen";
-import { categories, topratedSaloons } from "../../constants/data";
-import { useAuthContext } from "../../contexts/authContextProvider";
-import CategoryCard from "../../components/cards/categoryCard";
+import SalonSkeleton from "../../components/skeletons/salonSkeleton";
+import ServiceSkeleton from "../../components/skeletons/serviceSkeleton";
 import images from "../../constants/images";
+import { useAuthContext } from "../../contexts/authContextProvider";
+import { firestore } from "../../firebase/firebaseConfig";
 
 const Home = () => {
   const { user, isLoading } = useAuthContext();
+  const [services, setServices] = useState([]);
+  const [isServicesLoading, setIsServicesLoading] = useState(false);
+  const [salons, setSalons] = useState([]);
+  const [isSalonsLoading, setIsSalonsLoading] = useState(false);
+
+  const getSalons = async () => {
+    try {
+      setIsSalonsLoading(true);
+      const salonQ = query(
+        collection(firestore, "/users"),
+        where("type", "==", "vendor"),
+        where("isPublished", "==", true)
+      );
+      const salonDocs = await getDocs(salonQ);
+      const salons = salonDocs.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setSalons(salons);
+    } catch (error) {
+      console.log("getSalons Error", error);
+    } finally {
+      setIsSalonsLoading(false);
+    }
+  };
+
+  const getServices = async () => {
+    try {
+      setIsServicesLoading(true);
+
+      const servicesRef = collection(firestore, `/services`);
+      const serviceDocs = await getDocs(servicesRef);
+      const services = serviceDocs.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setServices(services);
+    } catch (error) {
+      console.log("getServices Error", error);
+    } finally {
+      setIsServicesLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getSalons();
+    getServices();
+  }, []);
 
   if (isLoading) {
     return <LoaderScreen isLoading={isLoading} />;
@@ -103,24 +154,40 @@ const Home = () => {
             Top-rated Saloons
           </Text>
 
-          <FlatList
-            ItemSeparatorComponent={
-              Platform.OS !== "android" &&
-              (({ highlighted }) => (
-                <View style={[highlighted && { marginLeft: 0 }]} />
-              ))
-            }
-            horizontal={true}
-            data={topratedSaloons}
-            renderItem={({ item, index, separators }) => (
-              <SalonCard
-                key={item.id}
-                salon={item}
-                styles="w-[230px]"
-                separators={separators}
-              />
-            )}
-          />
+          {isSalonsLoading ? (
+            <FlatList
+              ItemSeparatorComponent={
+                Platform.OS !== "android" &&
+                (({ highlighted }) => (
+                  <View style={[highlighted && { marginLeft: 0 }]} />
+                ))
+              }
+              horizontal={true}
+              data={[1, 1, 1, 1]}
+              renderItem={({ item, index, separators }) => (
+                <SalonSkeleton key={index} styles="w-[230px]" />
+              )}
+            />
+          ) : (
+            <FlatList
+              ItemSeparatorComponent={
+                Platform.OS !== "android" &&
+                (({ highlighted }) => (
+                  <View style={[highlighted && { marginLeft: 0 }]} />
+                ))
+              }
+              horizontal={true}
+              data={salons}
+              renderItem={({ item, index, separators }) => (
+                <SalonCard
+                  key={item.id}
+                  salon={item}
+                  styles="w-[230px]"
+                  separators={separators}
+                />
+              )}
+            />
+          )}
         </View>
 
         <View className="mt-5">
@@ -136,24 +203,40 @@ const Home = () => {
             </TouchableOpacity>
           </View>
 
-          <FlatList
-            ItemSeparatorComponent={
-              Platform.OS !== "android" &&
-              (({ highlighted }) => (
-                <View style={[highlighted && { marginLeft: 0 }]} />
-              ))
-            }
-            horizontal={true}
-            data={categories}
-            renderItem={({ item, index, separators }) => (
-              <CategoryCard
-                key={item.id}
-                category={item}
-                separators={separators}
-                styles="mr-3"
-              />
-            )}
-          />
+          {isServicesLoading ? (
+            <FlatList
+              ItemSeparatorComponent={
+                Platform.OS !== "android" &&
+                (({ highlighted }) => (
+                  <View style={[highlighted && { marginLeft: 0 }]} />
+                ))
+              }
+              horizontal={true}
+              data={[1, 1, 1, 1]}
+              renderItem={({ item, index, separators }) => (
+                <ServiceSkeleton key={index} styles="mr-3" />
+              )}
+            />
+          ) : (
+            <FlatList
+              ItemSeparatorComponent={
+                Platform.OS !== "android" &&
+                (({ highlighted }) => (
+                  <View style={[highlighted && { marginLeft: 0 }]} />
+                ))
+              }
+              horizontal={true}
+              data={services}
+              renderItem={({ item, index, separators }) => (
+                <CategoryCard
+                  key={item.id}
+                  category={item}
+                  separators={separators}
+                  styles="mr-3"
+                />
+              )}
+            />
+          )}
         </View>
       </View>
     </Container>
