@@ -136,13 +136,13 @@ const BookingModal: React.FC<BookingModalProps> = ({
 
               <View className="flex flex-row">
                 <Image
-                  source={{ uri: cart.shopLogo }}
+                  source={{ uri: cart.vendorImageURL }}
                   className="w-[100px] h-[100px] rounded-md mr-2"
                 />
 
                 <View className="flex-1">
                   <Text className="text-white text-2xl font-bold">
-                    {cart.shopName}
+                    {cart.vendorName}
                   </Text>
 
                   <Text className="text-gray-400 ml-1 font-semibold text-[13px]">

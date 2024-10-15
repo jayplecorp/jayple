@@ -1,10 +1,27 @@
-import { View, Text, TouchableOpacity, Image, Alert } from "react-native";
-import React from "react";
-import { CartData } from "../../types";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  Alert,
+  ActivityIndicator,
+} from "react-native";
+import React, { useState } from "react";
+import { CartData, UserData } from "../../types";
 import { Ionicons } from "@expo/vector-icons";
+import {
+  arrayRemove,
+  deleteDoc,
+  doc,
+  getDoc,
+  updateDoc,
+} from "firebase/firestore";
+import { firestore } from "../../firebase/firebaseConfig";
+import Toast from "react-native-root-toast";
 
 interface CartCardProps {
   openModal: (cart: CartData) => void;
+  user: UserData;
   cart: CartData;
   totPrice: number;
   discount: number;
@@ -12,22 +29,63 @@ interface CartCardProps {
 
 const CartCard: React.FC<CartCardProps> = ({
   openModal,
+  user,
   cart,
   discount,
   totPrice,
 }) => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const removeServiceFromCart = async (
+    serviceId: string,
+    serviceName: string,
+    servicePrice: number
+  ) => {
+    try {
+      setIsLoading(true);
+
+      const cartRef = doc(firestore, `/users/${user?.id}/cart/${cart?.id}`);
+      await updateDoc(cartRef, {
+        services: arrayRemove({
+          id: serviceId,
+          serviceName,
+          price: servicePrice,
+        }),
+      });
+
+      const updatedCartDoc = await getDoc(cartRef);
+      if (!updatedCartDoc.data()?.services.length) {
+        await deleteDoc(cartRef);
+      }
+
+      Toast.show("Service removed from the cart", {
+        duration: 3000,
+        hideOnPress: true,
+        backgroundColor: "#2a2a2a",
+        containerStyle: {
+          borderRadius: 30,
+          paddingHorizontal: 15,
+        },
+      });
+    } catch (error) {
+      console.log("removeServiceFromCart Error", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <View className="p-3 bg-secondary w-full rounded-md mb-2">
       <View className="flex flex-row">
         <Image
-          source={{ uri: cart.shopLogo }}
+          source={{ uri: cart.vendorImageURL }}
           className="w-[100px] h-[100px] rounded-md mr-2"
         />
 
         <View className="flex-1">
           <View className="flex flex-row items-center justify-between">
             <Text className="text-white text-2xl font-bold">
-              {cart.shopName}
+              {cart.vendorName}
             </Text>
 
             <TouchableOpacity
@@ -53,11 +111,39 @@ const CartCard: React.FC<CartCardProps> = ({
             </TouchableOpacity>
           </View>
 
-          {cart.services.map((service) => (
-            <Text key={service.id} className="text-gray-400 text-lg font-bold">
-              {service.serviceName}
-            </Text>
-          ))}
+          <View className="mt-1">
+            {cart.services.map((service) => (
+              <View
+                key={service.id}
+                className="flex flex-row items-center justify-between"
+              >
+                <Text className="text-gray-400 text-lg font-bold">
+                  {service.serviceName}
+                </Text>
+                <TouchableOpacity
+                  className="bg-red-400 w-[25px] h-[25px] flex items-center justify-center rounded-full"
+                  onPress={() =>
+                    removeServiceFromCart(
+                      service?.id as string,
+                      service.serviceName,
+                      cart.services.find((item) => item.id === service.id)
+                        ?.price
+                    )
+                  }
+                >
+                  {isLoading ? (
+                    <ActivityIndicator
+                      animating={isLoading}
+                      color="#fff"
+                      size="small"
+                    />
+                  ) : (
+                    <Ionicons name="trash" color="#fff" size={17} />
+                  )}
+                </TouchableOpacity>
+              </View>
+            ))}
+          </View>
         </View>
       </View>
 

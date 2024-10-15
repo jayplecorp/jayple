@@ -8,6 +8,7 @@ import {
   Platform,
   Text,
   TextInput,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -136,7 +137,10 @@ const Home = () => {
               <View className="p-8">
                 <Text className="text-white text-lg">Haircut</Text>
                 <Text className="text-white text-3xl font-bold">20% Off</Text>
-                <TouchableOpacity className="bg-white w-[140px] p-1 px-2 rounded-full flex flex-row items-center mt-6">
+                <TouchableOpacity
+                  className="bg-white w-[140px] p-1 px-2 rounded-full flex flex-row items-center mt-6"
+                  onPress={() => {}}
+                >
                   <Text className="flex-1 font-psemibold text-[15px] ml-1">
                     Get Offer
                   </Text>

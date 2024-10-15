@@ -49,7 +49,7 @@ const SalonScreen = () => {
 
   const vendorServicesIds = vendor?.services?.map((service) => service.id);
   const vendorServices = services?.filter((item) =>
-    vendorServicesIds.includes(item.id)
+    vendorServicesIds?.includes(item.id)
   );
 
   useEffect(() => {
@@ -111,6 +111,7 @@ const SalonScreen = () => {
             <CategoryCard
               key={service.id}
               category={service}
+              vendor={vendor}
               isSalonPage
               servicePrice={
                 vendor.services.find((item) => item.id === service.id)?.price

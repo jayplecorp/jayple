@@ -49,8 +49,8 @@ export type Category = {
 
 export type CartData = {
   id: number;
-  shopName: string;
-  shopLogo: string;
+  vendorName: string;
+  vendorImageURL: string;
   location: string;
   services: Category[];
 };

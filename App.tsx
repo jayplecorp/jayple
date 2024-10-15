@@ -1,10 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { LogBox } from "react-native";
 import { StyleSheet, Text, View } from "react-native";
-
-LogBox.ignoreLogs([
-  "Warning: Header: Support for defaultProps will be removed from function components in a future major release. Use JavaScript default parameters instead.",
-]);
 
 export default function App() {
   return (

@@ -7,9 +7,25 @@ import LoaderScreen from "../../components/loaderScreen";
 import { Ionicons } from "@expo/vector-icons";
 import Container from "../../components/container";
 import { placeHolderImg } from "../../constants";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 const MyProfile = () => {
   const { user, isLoading } = useAuthContext();
+
+  GoogleSignin.configure({
+    webClientId:
+      "873957741068-hnv4j9ehovp2u2cr2h1jv2ced18ss529.apps.googleusercontent.com",
+  });
+
+  const handleLogout = async () => {
+    try {
+      await GoogleSignin.revokeAccess();
+      await GoogleSignin.signOut();
+      await auth().signOut();
+    } catch (error) {
+      console.log("handleLogout Error", error);
+    }
+  };
 
   if (isLoading) {
     return <LoaderScreen isLoading={isLoading} />;
@@ -65,7 +81,7 @@ const MyProfile = () => {
         <CustomButton
           title="Logout"
           containerStyle="w-[200px]"
-          handlePress={() => auth().signOut()}
+          handlePress={() => handleLogout()}
         />
       </View>
     </Container>

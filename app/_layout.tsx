@@ -2,6 +2,7 @@ import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import React, { useEffect } from "react";
 import AuthContextProvider from "../contexts/authContextProvider";
+import { RootSiblingParent } from "react-native-root-siblings";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -33,21 +34,23 @@ const RootLayout = () => {
 
   return (
     <AuthContextProvider>
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          animation: "slide_from_right",
-          contentStyle: {
-            backgroundColor: "#000000",
-          },
-        }}
-      >
-        <Stack.Screen name="index" />
-        <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="(auth)" />
-        <Stack.Screen name="search/index" />
-        <Stack.Screen name="vendor/[vendorId]" />
-      </Stack>
+      <RootSiblingParent>
+        <Stack
+          screenOptions={{
+            headerShown: false,
+            animation: "slide_from_right",
+            contentStyle: {
+              backgroundColor: "#000000",
+            },
+          }}
+        >
+          <Stack.Screen name="index" />
+          <Stack.Screen name="(tabs)" />
+          <Stack.Screen name="(auth)" />
+          <Stack.Screen name="search/index" />
+          <Stack.Screen name="vendor/[vendorId]" />
+        </Stack>
+      </RootSiblingParent>
     </AuthContextProvider>
   );
 };
