@@ -41,16 +41,34 @@ export type Salon = {
 };
 
 export type Category = {
-  id: number | string;
+  id: string;
   serviceName: string;
   serviceImageURL: string;
   price?: number;
 };
 
 export type CartData = {
-  id: number;
+  id: string;
   vendorName: string;
   vendorImageURL: string;
+  startTime?: string;
+  endTime?: string;
   location: string;
   services: Category[];
+};
+
+export type Booking = {
+  id: string;
+  vendorId: string;
+  userId: string;
+  name: string;
+  phoneNumber: string;
+  bookedDate: string;
+  slotTime: string;
+  location: string;
+  services: Category[];
+  vendorName: string;
+  vendorImageURL: string;
+  status: "ongoing" | "completed";
+  createdAt: Timestamp;
 };

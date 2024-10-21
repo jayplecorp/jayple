@@ -1,37 +1,33 @@
-import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
+import { Text, TouchableOpacity } from "react-native";
 
 interface TimeSlotProps {
-  timeSlot: { time: string; available: boolean };
+  timeSlot: string;
   selectedSlot: string;
   setSelectedSlot: React.Dispatch<React.SetStateAction<string>>;
+  bookedSlots: string[];
 }
 
 const TimeSlot: React.FC<TimeSlotProps> = ({
   timeSlot,
   selectedSlot,
   setSelectedSlot,
+  bookedSlots,
 }) => {
-  const handleSelectSlot = () => {
-    if (!timeSlot.available) return;
-
-    setSelectedSlot(timeSlot.time);
-  };
-
   return (
     <TouchableOpacity
       className={`${
-        selectedSlot === timeSlot.time
+        selectedSlot === timeSlot
           ? "bg-accent"
-          : timeSlot.available
+          : !bookedSlots.includes(timeSlot)
           ? "bg-secondary-100"
           : "bg-secondary-100 opacity-30"
       } mr-2 mb-3 p-4 rounded-md`}
       activeOpacity={1}
-      disabled={!timeSlot.available}
-      onPress={() => handleSelectSlot()}
+      disabled={bookedSlots.includes(timeSlot)}
+      onPress={() => setSelectedSlot(timeSlot)}
     >
-      <Text className="text-white text-lg">{timeSlot.time}</Text>
+      <Text className="text-white text-lg">{timeSlot}</Text>
     </TouchableOpacity>
   );
 };

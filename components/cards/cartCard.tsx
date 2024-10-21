@@ -35,6 +35,30 @@ const CartCard: React.FC<CartCardProps> = ({
   totPrice,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isRemoving, setIsRemoving] = useState(false);
+
+  const removeFromCart = async () => {
+    try {
+      setIsRemoving(true);
+
+      const cartRef = doc(firestore, `/users/${user?.id}/cart/${cart?.id}`);
+      await deleteDoc(cartRef);
+
+      Toast.show("Item removed from the cart", {
+        duration: 3000,
+        hideOnPress: true,
+        backgroundColor: "#2a2a2a",
+        containerStyle: {
+          borderRadius: 30,
+          paddingHorizontal: 15,
+        },
+      });
+    } catch (error) {
+      console.log("removeFromCart Error", error);
+    } finally {
+      setIsRemoving(false);
+    }
+  };
 
   const removeServiceFromCart = async (
     serviceId: string,
@@ -101,13 +125,21 @@ const CartCard: React.FC<CartCardProps> = ({
                     },
                     {
                       text: "Delete",
-                      onPress: () => {},
+                      onPress: () => removeFromCart(),
                     },
                   ]
                 )
               }
             >
-              <Ionicons name="close" color="#ffffff" size={25} />
+              {isRemoving ? (
+                <ActivityIndicator
+                  animating={isRemoving}
+                  color="#fff"
+                  size="small"
+                />
+              ) : (
+                <Ionicons name="close" color="#ffffff" size={25} />
+              )}
             </TouchableOpacity>
           </View>
 

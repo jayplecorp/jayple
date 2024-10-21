@@ -77,6 +77,7 @@ const Cart = () => {
 
                       {selectedCart && (
                         <BookingModal
+                          user={user}
                           modalVisible={modalVisible}
                           setModalVisible={setModalVisible}
                           closeModal={closeModal}

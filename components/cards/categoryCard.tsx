@@ -64,13 +64,25 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
         await setDoc(cartRef, {
           vendorName: vendor?.name,
           vendorImageURL: vendor?.imageURL,
-          location: vendor.location,
+          location: vendor?.location,
+          startTime: vendor?.startTime,
+          endTime: vendor?.endTime,
           services: arrayUnion({
             id: serviceId,
             serviceName,
             price: servicePrice,
           }),
           createdAt: serverTimestamp(),
+        });
+
+        Toast.show("Service added to the cart", {
+          duration: 3000,
+          hideOnPress: true,
+          backgroundColor: "#2a2a2a",
+          containerStyle: {
+            borderRadius: 30,
+            paddingHorizontal: 15,
+          },
         });
       } else {
         if (isInCart) {

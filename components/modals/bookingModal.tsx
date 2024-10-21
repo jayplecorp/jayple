@@ -8,13 +8,29 @@ import {
   Image,
   ScrollView,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import TimeSlot from "../cards/timeSlot";
-import { CartData } from "../../types";
+import { CartData, UserData } from "../../types";
 import moment from "moment";
+import { generateDates, generateTimeSlots } from "../../utils";
+import {
+  addDoc,
+  arrayUnion,
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  serverTimestamp,
+  setDoc,
+} from "firebase/firestore";
+import { firestore } from "../../firebase/firebaseConfig";
+import CustomButton from "../customButton";
+import SlotSkeleton from "../skeletons/slotSkeleton";
+import { router } from "expo-router";
 
 interface BookingModalProps {
+  user: UserData;
   modalVisible: boolean;
   setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
   closeModal: () => void;
@@ -22,41 +38,96 @@ interface BookingModalProps {
 }
 
 const BookingModal: React.FC<BookingModalProps> = ({
+  user,
   modalVisible,
   setModalVisible,
   closeModal,
   cart,
 }) => {
+  const [availableDates, setAvailableDates] = useState(generateDates());
   const [selectedDate, setSelectedDate] = useState(
     moment().format("YYYY-MM-DD")
   );
+  const [timeSlots, setTimeSlots] = useState([]);
+  const [bookedSlots, setBookedSlots] = useState<string[] | []>([]);
+  const [isSlotting, setIsSlotting] = useState(false);
   const [selectedSlot, setSelectedSlot] = useState("");
-  const [timeSlots, setTimeSlots] = useState([
-    { time: "10:00 AM", available: true },
-    { time: "11:00 AM", available: true },
-    { time: "12:00 PM", available: true },
-    { time: "01:00 PM", available: false },
-    { time: "02:00 PM", available: true },
-    { time: "03:00 PM", available: false },
-    { time: "04:00 PM", available: true },
-  ]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const totPrice = cart.services.reduce((sum, item) => sum + item.price, 0);
   const discount = (totPrice / 100) * 20;
 
-  const generateDates = () => {
-    const dates = [];
-    const startDate = moment();
+  const handleBookSlot = async () => {
+    try {
+      if (!selectedDate || !selectedSlot) return;
 
-    // Generate 30 future dates
-    for (let i = 0; i < 30; i++) {
-      dates.push(moment(startDate).add(i, "days").format("YYYY-MM-DD"));
+      setIsLoading(true);
+
+      const bookingRef = collection(firestore, "bookings");
+      await addDoc(bookingRef, {
+        userId: user?.id,
+        name: user?.name,
+        phoneNumber: user?.phoneNumber,
+        vendorId: cart?.id,
+        vendorName: cart?.vendorName,
+        vendorImageURL: cart?.vendorImageURL,
+        bookedDate: selectedDate,
+        slotTime: selectedSlot,
+        services: cart?.services,
+        location: cart?.location,
+        status: "ongoing",
+        createdAt: serverTimestamp(),
+      });
+
+      const bookedSlotRef = doc(
+        firestore,
+        `/users/${cart?.id}/bookedSlots/${selectedDate}`
+      );
+      await setDoc(bookedSlotRef, {
+        slots: arrayUnion(selectedSlot),
+      });
+
+      const userCartRef = doc(firestore, `/users/${user?.id}/cart/${cart?.id}`);
+      await deleteDoc(userCartRef);
+
+      closeModal();
+      router.push("/bookings");
+    } catch (error) {
+      console.log("handleBookSlot Error", error);
+    } finally {
+      setIsLoading(false);
     }
-
-    return dates;
   };
 
-  const [availableDates, setAvailableDates] = useState(generateDates());
+  const getBookedSlots = async (date: string) => {
+    try {
+      setIsSlotting(true);
+
+      setTimeSlots(generateTimeSlots(cart.startTime, cart.endTime));
+
+      const bookedSlotRef = doc(
+        firestore,
+        `/users/${cart?.id}/bookedSlots/${date}`
+      );
+      const bookedSlots = await getDoc(bookedSlotRef);
+
+      if (bookedSlots.exists()) {
+        setBookedSlots(bookedSlots.data()?.slots);
+      } else {
+        setBookedSlots([]);
+      }
+    } catch (error) {
+      console.log("getBookedSlots Error", error);
+    } finally {
+      setIsSlotting(false);
+    }
+  };
+
+  useEffect(() => {
+    if (selectedDate) {
+      getBookedSlots(selectedDate);
+    }
+  }, [selectedDate]);
 
   return (
     <View className="flex-1 items-center justify-center">
@@ -117,16 +188,25 @@ const BookingModal: React.FC<BookingModalProps> = ({
                 Available Time Slots
               </Text>
 
-              <View className="flex flex-row flex-wrap justify-between">
-                {timeSlots.map((slot, index) => (
-                  <TimeSlot
-                    key={index}
-                    timeSlot={slot}
-                    selectedSlot={selectedSlot}
-                    setSelectedSlot={setSelectedSlot}
-                  />
-                ))}
-              </View>
+              {isSlotting ? (
+                <View className="flex flex-row flex-wrap justify-between">
+                  {Array.from({ length: 15 }).map((_, i) => (
+                    <SlotSkeleton key={i} />
+                  ))}
+                </View>
+              ) : (
+                <View className="flex flex-row flex-wrap justify-between">
+                  {timeSlots.map((slot, index) => (
+                    <TimeSlot
+                      key={index}
+                      timeSlot={slot}
+                      selectedSlot={selectedSlot}
+                      setSelectedSlot={setSelectedSlot}
+                      bookedSlots={bookedSlots}
+                    />
+                  ))}
+                </View>
+              )}
             </View>
 
             <View className="mt-3">
@@ -184,14 +264,11 @@ const BookingModal: React.FC<BookingModalProps> = ({
                 </View>
               </View>
 
-              <TouchableOpacity
-                className="bg-accent flex items-center justify-center p-3 rounded-md"
-                onPress={() => {}}
-              >
-                <Text className="text-white text-lg font-bold">
-                  Book your slot and Pay
-                </Text>
-              </TouchableOpacity>
+              <CustomButton
+                title="Book your slot and Pay"
+                isLoading={isLoading}
+                handlePress={handleBookSlot}
+              />
             </View>
           </ScrollView>
         </View>
