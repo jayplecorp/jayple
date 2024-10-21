@@ -19,8 +19,16 @@ const MyProfile = () => {
 
   const handleLogout = async () => {
     try {
-      await GoogleSignin.revokeAccess();
-      await GoogleSignin.signOut();
+      const user = auth().currentUser;
+      if (!user) return;
+
+      const providerId = user.providerData[0]?.providerId;
+
+      if (providerId === "google.com") {
+        await GoogleSignin.revokeAccess();
+        await GoogleSignin.signOut();
+      }
+
       await auth().signOut();
     } catch (error) {
       console.log("handleLogout Error", error);

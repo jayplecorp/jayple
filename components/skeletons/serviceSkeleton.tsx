@@ -10,7 +10,7 @@ const ServiceSkeleton = ({
 }) => {
   return (
     <View
-      className={`bg-secondary rounded-md w-[180px] ${
+      className={`bg-secondary rounded-md w-[48%] ${
         isSalonPage ? "h-[230px]" : "h-[200px]"
       } mb-4 ${styles}`}
     >

@@ -22,7 +22,7 @@ const TimeSlot: React.FC<TimeSlotProps> = ({
           : !bookedSlots.includes(timeSlot)
           ? "bg-secondary-100"
           : "bg-secondary-100 opacity-30"
-      } mr-2 mb-3 p-4 rounded-md`}
+      } mr-2 mb-3 p-4 rounded-md w-[30%]`}
       activeOpacity={1}
       disabled={bookedSlots.includes(timeSlot)}
       onPress={() => setSelectedSlot(timeSlot)}

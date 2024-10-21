@@ -6,6 +6,7 @@ import {
   Query,
   collection,
   getDocs,
+  onSnapshot,
   orderBy,
   query,
   where,
@@ -23,37 +24,42 @@ const Bookings = () => {
 
   const getBookings = async () => {
     try {
-      let bookingQ: Query;
-
-      if (user?.type === "vendor") {
-        bookingQ = query(
-          collection(firestore, `/bookings`),
-          where("vendorId", "==", user?.id),
-          orderBy("createdAt", "desc")
-        );
-      } else {
-        bookingQ = query(
-          collection(firestore, `/bookings`),
-          where("userId", "==", user?.id),
-          orderBy("createdAt", "desc")
-        );
-      }
-
-      const bookingDocs = await getDocs(bookingQ);
-      const bookings = bookingDocs.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setBookings(bookings);
     } catch (error) {
       console.log("getBookings Error", error);
     } finally {
-      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    getBookings();
+    let bookingQ: Query;
+
+    if (user?.type === "vendor") {
+      bookingQ = query(
+        collection(firestore, `/bookings`),
+        where("vendorId", "==", user?.id),
+        orderBy("createdAt", "desc")
+      );
+    } else {
+      bookingQ = query(
+        collection(firestore, `/bookings`),
+        where("userId", "==", user?.id),
+        orderBy("createdAt", "desc")
+      );
+    }
+
+    const unsubscribe = onSnapshot(bookingQ, (snapshot) => {
+      const bookings = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      setBookings(bookings);
+      setIsLoading(false);
+    });
+
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   if (isLoading) {

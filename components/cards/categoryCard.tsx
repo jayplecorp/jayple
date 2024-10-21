@@ -30,6 +30,7 @@ interface CategoryCardProps {
   servicePrice?: number;
   vendor?: UserData;
   styles?: string;
+  isHorizontal?: boolean;
   separators?: {
     highlight: () => void;
     unhighlight: () => void;
@@ -43,6 +44,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
   servicePrice,
   vendor,
   styles,
+  isHorizontal,
   separators,
 }) => {
   const { user } = useAuthContext();
@@ -158,8 +160,9 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
       key={category.id}
       onShowUnderlay={separators?.highlight ?? null}
       onHideUnderlay={separators?.unhighlight ?? null}
+      className={!isHorizontal && "w-[48%]"}
     >
-      <View className={`bg-secondary rounded-md w-[180px] mb-4 ${styles}`}>
+      <View className={`bg-secondary rounded-md w-full mb-4 ${styles}`}>
         <Image
           source={{
             uri: category.serviceImageURL ?? placeHolderImg,

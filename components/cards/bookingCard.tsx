@@ -1,8 +1,18 @@
-import { View, Text, Image, TouchableOpacity, Alert } from "react-native";
-import React from "react";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  Alert,
+  ActivityIndicator,
+} from "react-native";
+import React, { useState } from "react";
 import { Booking, UserData } from "../../types";
 import { Ionicons } from "@expo/vector-icons";
 import moment from "moment";
+import { doc, updateDoc } from "firebase/firestore";
+import { firestore } from "../../firebase/firebaseConfig";
+import Toast from "react-native-root-toast";
 
 interface BookingCardProps {
   user: UserData;
@@ -17,6 +27,38 @@ const BookingCard: React.FC<BookingCardProps> = ({
   discount,
   totPrice,
 }) => {
+  const ogDate = booking?.bookedDate;
+  const [y, m, d] = ogDate.split("-");
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const markAsComplete = async () => {
+    try {
+      if (user?.type !== "vendor") return;
+
+      setIsLoading(true);
+
+      const bookingRef = doc(firestore, `/bookings/${booking.id}`);
+      await updateDoc(bookingRef, {
+        status: "completed",
+      });
+
+      Toast.show("Order has been successfully completed!", {
+        duration: 3000,
+        hideOnPress: true,
+        backgroundColor: "#2a2a2a",
+        containerStyle: {
+          borderRadius: 30,
+          paddingHorizontal: 15,
+        },
+      });
+    } catch (error) {
+      console.log("markAsComplete Error", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <View className="p-3 bg-secondary w-full rounded-md mb-4">
       <View className="flex flex-row">
@@ -53,7 +95,7 @@ const BookingCard: React.FC<BookingCardProps> = ({
           </>
         )}
         <Text className="text-gray-400 text-lg font-bold">
-          Booked Date: <Text className="text-accent">{booking.bookedDate}</Text>
+          Booked Date: <Text className="text-accent">{`${d}-${m}-${y}`}</Text>
         </Text>
         <Text className="text-gray-400 text-lg font-bold">
           Slot Time: <Text className="text-accent">{booking.slotTime}</Text>
@@ -95,6 +137,23 @@ const BookingCard: React.FC<BookingCardProps> = ({
         } ${
           user?.type !== "vendor" && "opacity-40"
         } flex flex-row items-center justify-center p-2 rounded-3xl mt-3`}
+        disabled={user?.type !== "vendor" || booking.status === "completed"}
+        onPress={() =>
+          Alert.alert(
+            "Complete order",
+            `Are you sure, you're completed ${booking.name}'s order?`,
+            [
+              {
+                text: "Cancel",
+                style: "cancel",
+              },
+              {
+                text: "Complete",
+                onPress: () => markAsComplete(),
+              },
+            ]
+          )
+        }
       >
         {user?.type !== "vendor" ? (
           <>
@@ -111,9 +170,26 @@ const BookingCard: React.FC<BookingCardProps> = ({
           </>
         ) : (
           <>
-            <Text className="text-white text-lg font-bold ml-1">
-              Make as complete
-            </Text>
+            {isLoading && (
+              <ActivityIndicator
+                animating={isLoading}
+                color="#fff"
+                size="small"
+                style={{ marginRight: 2 }}
+              />
+            )}
+            {booking.status === "ongoing" ? (
+              <Text className="text-white text-lg font-bold ml-1">
+                Make as complete
+              </Text>
+            ) : (
+              <>
+                <Ionicons name="checkmark-circle" size={25} color="#fff" />
+                <Text className="text-white text-lg font-bold ml-1 capitalize">
+                  {booking.status}
+                </Text>
+              </>
+            )}
           </>
         )}
       </TouchableOpacity>

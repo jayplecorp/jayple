@@ -189,7 +189,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
               </Text>
 
               {isSlotting ? (
-                <View className="flex flex-row flex-wrap justify-between">
+                <View className="flex flex-row flex-wrap justify-between w-full">
                   {Array.from({ length: 15 }).map((_, i) => (
                     <SlotSkeleton key={i} />
                   ))}

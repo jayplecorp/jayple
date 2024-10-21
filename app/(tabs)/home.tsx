@@ -218,7 +218,7 @@ const Home = () => {
               horizontal={true}
               data={[1, 1, 1, 1]}
               renderItem={({ item, index, separators }) => (
-                <ServiceSkeleton key={index} styles="mr-3" />
+                <ServiceSkeleton key={index} styles="mr-3 w-[180px]" />
               )}
             />
           ) : (
@@ -236,7 +236,8 @@ const Home = () => {
                   key={item.id}
                   category={item}
                   separators={separators}
-                  styles="mr-3"
+                  isHorizontal={true}
+                  styles="mr-3 w-[180px]"
                 />
               )}
             />
