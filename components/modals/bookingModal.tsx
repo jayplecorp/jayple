@@ -23,6 +23,7 @@ import {
   getDoc,
   serverTimestamp,
   setDoc,
+  updateDoc,
 } from "firebase/firestore";
 import { firestore } from "../../firebase/firebaseConfig";
 import CustomButton from "../customButton";
@@ -83,7 +84,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
         firestore,
         `/users/${cart?.id}/bookedSlots/${selectedDate}`
       );
-      await setDoc(bookedSlotRef, {
+      await updateDoc(bookedSlotRef, {
         slots: arrayUnion(selectedSlot),
       });
 

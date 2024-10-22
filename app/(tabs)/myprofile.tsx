@@ -1,5 +1,5 @@
 import auth from "@react-native-firebase/auth";
-import React from "react";
+import React, { useState } from "react";
 import { Image, Text, View } from "react-native";
 import CustomButton from "../../components/customButton";
 import { useAuthContext } from "../../contexts/authContextProvider";
@@ -11,6 +11,7 @@ import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 const MyProfile = () => {
   const { user, isLoading } = useAuthContext();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   GoogleSignin.configure({
     webClientId:
@@ -19,6 +20,8 @@ const MyProfile = () => {
 
   const handleLogout = async () => {
     try {
+      setIsLoggingOut(true);
+
       const user = auth().currentUser;
       if (!user) return;
 
@@ -32,6 +35,8 @@ const MyProfile = () => {
       await auth().signOut();
     } catch (error) {
       console.log("handleLogout Error", error);
+    } finally {
+      setIsLoggingOut(false);
     }
   };
 
@@ -89,6 +94,7 @@ const MyProfile = () => {
         <CustomButton
           title="Logout"
           containerStyle="w-[200px]"
+          isLoading={isLoggingOut}
           handlePress={() => handleLogout()}
         />
       </View>
