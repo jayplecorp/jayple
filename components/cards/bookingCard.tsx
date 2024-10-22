@@ -38,7 +38,7 @@ const BookingCard: React.FC<BookingCardProps> = ({
 
       setIsLoading(true);
 
-      const bookingRef = doc(firestore, `/bookings/${booking.id}`);
+      const bookingRef = doc(firestore, `/bookings/${booking?.id}`);
       await updateDoc(bookingRef, {
         status: "completed",
       });
@@ -63,19 +63,19 @@ const BookingCard: React.FC<BookingCardProps> = ({
     <View className="p-3 bg-secondary w-full rounded-md mb-4">
       <View className="flex flex-row">
         <Image
-          source={{ uri: booking.vendorImageURL }}
+          source={{ uri: booking?.vendorImageURL }}
           className="w-[100px] h-[100px] rounded-md mr-2"
         />
 
         <View className="flex-1">
           <Text className="text-white text-2xl font-bold">
-            {booking.vendorName}
+            {booking?.vendorName}
           </Text>
 
           <View className="mt-1">
-            <Text className="text-gray-400 font-bold">BID: {booking.id}</Text>
+            <Text className="text-gray-400 font-bold">BID: {booking?.id}</Text>
             <Text className="text-gray-400 font-bold italic">
-              {moment(booking.createdAt.seconds * 1000).fromNow()}
+              {moment(booking?.createdAt?.seconds * 1000).fromNow()}
             </Text>
           </View>
         </View>
@@ -86,11 +86,11 @@ const BookingCard: React.FC<BookingCardProps> = ({
         {user?.type === "vendor" && (
           <>
             <Text className="text-gray-400 text-lg font-bold">
-              Name: <Text className="text-accent">{booking.name}</Text>
+              Name: <Text className="text-accent">{booking?.name}</Text>
             </Text>
             <Text className="text-gray-400 text-lg font-bold">
               Phone No:{" "}
-              <Text className="text-accent">{booking.phoneNumber}</Text>
+              <Text className="text-accent">{booking?.phoneNumber}</Text>
             </Text>
           </>
         )}
@@ -98,22 +98,22 @@ const BookingCard: React.FC<BookingCardProps> = ({
           Booked Date: <Text className="text-accent">{`${d}-${m}-${y}`}</Text>
         </Text>
         <Text className="text-gray-400 text-lg font-bold">
-          Slot Time: <Text className="text-accent">{booking.slotTime}</Text>
+          Slot Time: <Text className="text-accent">{booking?.slotTime}</Text>
         </Text>
       </View>
 
       <View className="mt-2">
         <Text className="text-white text-xl font-semibold">Services</Text>
-        {booking.services.map((service) => (
+        {booking?.services.map((service) => (
           <View
-            key={service.id}
+            key={service?.id}
             className="flex flex-row items-center justify-between mt-1"
           >
             <Text className="text-gray-400 text-lg font-bold">
-              {service.serviceName}
+              {service?.serviceName}
             </Text>
             <Text className="text-gray-400 text-lg font-bold">
-              1 x {service.price} = ₹{1 * service.price}
+              1 x {service?.price} = ₹{1 * service?.price}
             </Text>
           </View>
         ))}
@@ -133,15 +133,15 @@ const BookingCard: React.FC<BookingCardProps> = ({
 
       <TouchableOpacity
         className={`${
-          booking.status === "ongoing" ? "bg-accent" : "bg-secondary-100"
+          booking?.status === "ongoing" ? "bg-accent" : "bg-secondary-100"
         } ${
           user?.type !== "vendor" && "opacity-40"
         } flex flex-row items-center justify-center p-2 rounded-3xl mt-3`}
-        disabled={user?.type !== "vendor" || booking.status === "completed"}
+        disabled={user?.type !== "vendor" || booking?.status === "completed"}
         onPress={() =>
           Alert.alert(
             "Complete order",
-            `Are you sure, you're completed ${booking.name}'s order?`,
+            `Are you sure, you're completed ${booking?.name}'s order?`,
             [
               {
                 text: "Cancel",
@@ -159,13 +159,15 @@ const BookingCard: React.FC<BookingCardProps> = ({
           <>
             <Ionicons
               name={
-                booking.status === "ongoing" ? "arrow-redo" : "checkmark-circle"
+                booking?.status === "ongoing"
+                  ? "arrow-redo"
+                  : "checkmark-circle"
               }
               size={25}
               color="#fff"
             />
             <Text className="text-white text-lg font-bold ml-1 capitalize">
-              {booking.status}
+              {booking?.status}
             </Text>
           </>
         ) : (
@@ -178,7 +180,7 @@ const BookingCard: React.FC<BookingCardProps> = ({
                 style={{ marginRight: 2 }}
               />
             )}
-            {booking.status === "ongoing" ? (
+            {booking?.status === "ongoing" ? (
               <Text className="text-white text-lg font-bold ml-1">
                 Make as complete
               </Text>
@@ -186,14 +188,14 @@ const BookingCard: React.FC<BookingCardProps> = ({
               <>
                 <Ionicons name="checkmark-circle" size={25} color="#fff" />
                 <Text className="text-white text-lg font-bold ml-1 capitalize">
-                  {booking.status}
+                  {booking?.status}
                 </Text>
               </>
             )}
           </>
         )}
       </TouchableOpacity>
-      {booking.status === "ongoing" && user?.type !== "vendor" && (
+      {booking?.status === "ongoing" && user?.type !== "vendor" && (
         <Text className="text-gray-400 text-[12px] ml-1 mt-0.5 font-bold">
           Tips: Get to the salon ahead of your booked slot time.
         </Text>

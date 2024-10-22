@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, TouchableOpacity } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 
 interface TimeSlotProps {
   timeSlot: string;
@@ -22,7 +22,7 @@ const TimeSlot: React.FC<TimeSlotProps> = ({
           : !bookedSlots.includes(timeSlot)
           ? "bg-secondary-100"
           : "bg-secondary-100 opacity-30"
-      } mr-2 mb-3 p-4 rounded-md w-[30%]`}
+      } mr-2 mb-3 p-3 rounded-md w-[30%] flex flex-row items-center justify-center`}
       activeOpacity={1}
       disabled={bookedSlots.includes(timeSlot)}
       onPress={() => setSelectedSlot(timeSlot)}
